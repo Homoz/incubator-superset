@@ -1084,6 +1084,36 @@ export const visTypes = {
       },
     },
   },
+
+  china_map: {
+    label: 'China Map',
+    showOnExplore: true,
+    controlPanelSections: [
+      {
+        label: 'Qurey',
+        controlSetRows: [
+          ['groupby'],
+          ['metric'],
+        ],
+      },
+      {
+        label: 'Chart Options',
+        controlSetRows: [
+          // TODO
+        ],
+      },
+    ],
+    controlOverrides: {
+      groupby: {
+        label: 'Cites', // TODO: change label here
+        description: 'This should be a column of city code',
+      },
+      metric: {
+        label: 'Metric',
+        description: 'Metric for a city',
+      },
+    },
+  },
 };
 
 export default visTypes;
