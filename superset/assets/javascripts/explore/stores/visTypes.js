@@ -1093,7 +1093,8 @@ export const visTypes = {
         label: 'Qurey',
         controlSetRows: [
           ['groupby'],
-          ['metric'],
+          ['all_columns_x', 'all_columns_y'],
+          ['metrics'],
         ],
       },
       {
@@ -1105,10 +1106,18 @@ export const visTypes = {
     ],
     controlOverrides: {
       groupby: {
-        label: 'Cites', // TODO: change label here
+        label: 'City Name', // TODO: change label here
         description: 'This should be a column of city code',
       },
-      metric: {
+      all_columns_x: {
+        label: 'Longitude',
+        description: 'Column containing longitude data',
+      },
+      all_columns_y: {
+        label: 'Latitude',
+        description: 'Column containing latitude data',
+      },
+      metrics: {
         label: 'Metric',
         description: 'Metric for a city',
       },

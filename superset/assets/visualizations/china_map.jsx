@@ -15,6 +15,24 @@ function china_map_viz(slice, payload) {
   const geoCoordMap = data.geoCoordMap;
   const citiesWithValues = data.citiesWithValues;
   const valuesArray = citiesWithValues.map(item => item.value);
+  const maxValue = Math.max.apply(null, valuesArray);
+  const minValue = Math.min.apply(null, valuesArray);
+
+  // TODO: clousre or curring
+  // TODO: chart options panel
+  var scaler = function(value, min=minValue, max=maxValue, 
+    symbolMaxSize = 36, levelsAmount = 6) {
+
+    let levels = []
+    for (let i = 1; i <= levelsAmount; ++i) {
+        levels.push(symbolMaxSize * i / levelsAmount);
+    }
+    levels.push(symbolMaxSize);
+
+      // return symbolMaxSize * (value - minValue) / (maxValue - minValue);
+      let index = Math.floor(levelsAmount * (value - minValue) / (maxValue - minValue));
+      return levels[index];
+  }
 
   var convertGeoData = function(geoData) {
     var res = [];
@@ -71,14 +89,15 @@ function china_map_viz(slice, payload) {
       },
     },
     visualMap: { // TODO
-      min: Math.min.apply(null, valuesArray),
-      max: Math.max.apply(null, valuesArray),
+      min: minValue,
+      max: maxValue,
       left: 'left',
       top: 'bottom',
       text: ['max','min'],
       calculable: true,
       inRange: {
         color: ['#50a3ba', '#eac736', '#d94e5d'],
+        // symbolSize: [10, 30],
       },
     },
     geo: {
@@ -105,9 +124,7 @@ function china_map_viz(slice, payload) {
         type: 'scatter',
         coordinateSystem: 'geo',
         data: convertGeoData(citiesWithValues),
-        symbolSize: function (val) {
-          return val[2] / 10;
-        },
+        symbolSize: (val) => scaler(val[2]),
         label: {
           normal: {
             formatter: '{b}',
@@ -131,9 +148,7 @@ function china_map_viz(slice, payload) {
       data: convertGeoData(citiesWithValues.sort(function (a, b) {
         return b.value - a.value;
       }).slice(0, 6)),
-      symbolSize: function (val) {
-        return val[2] / 10;
-      },
+      symbolSize: (val) => scaler(val[2]),
       showEffectOn: 'render',
       rippleEffect: {
         brushType: 'stroke'
